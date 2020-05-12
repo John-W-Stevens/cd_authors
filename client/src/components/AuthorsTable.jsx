@@ -3,14 +3,30 @@ import axios from "axios"
 import { Link, navigate } from "@reach/router"
 
 const AuthorsTable = props => {
-    const { counter } = props
+    const { counter, setCounter } = props
     const [authors, setAuthors] = useState([])
 
     useEffect( () => {
         axios.get("http://localhost:8000/api/authors")
-            .then(response => setAuthors(response.data.Authors))
+            .then(response => setAuthors((response.data.Authors).sort((a,b) => (a.name > b.name) ? 1: -1)))
             .catch(error => console.log("There was an issue: ", error))
     }, [counter])
+
+
+    const getAuthorId = author => {
+        return `/${author._id}`
+    }
+
+    const editAuthorUrl = author_id => {
+        return `${author_id}/edit`
+    }
+
+    const deleteAuthor = url => {
+        axios.delete("http://localhost:8000/api/authors" + url)
+            .then(response => console.log("Author was successfully deleted: ", response))
+            .then(()=> setCounter( {count: -1} ))
+            .catch(error => console.log("There was a problem: ", error))
+    }
 
     return(
         <div className="container">
@@ -35,8 +51,8 @@ const AuthorsTable = props => {
                                 <tr key={i}>
                                     <td>{author.name}</td>
                                     <td>
-                                        <button className="btn btn-warning btn-sm">Edit</button>
-                                        <button className="btn btn-danger btn-sm" style={{marginLeft: "10px"}}>Delete</button>
+                                        <button className="btn btn-warning btn-sm"><Link to={ getAuthorId(author) }>Edit</Link></button>
+                                        <button onClick={ (e)=>{deleteAuthor(getAuthorId(author))} } className="btn btn-danger btn-sm" style={{marginLeft: "10px"}}>Delete</button>
                                     </td>
                                 </tr>
                             ))

@@ -1,5 +1,8 @@
 const mongoose = require("mongoose")
 
+// this line enables validators to run on update
+mongoose.set("runValidators", true);
+
 mongoose.connect("mongodb://localhost/authorsdb", {
     useNewUrlParser: true,
     useUnifiedTopology: true,

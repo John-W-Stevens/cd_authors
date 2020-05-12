@@ -29,17 +29,16 @@ const CreateAuthorForm = props => {
             <div className="row">
                 <div className="col-12">
                     <p><Link to="/">Home</Link></p>
-                    <p>Add a new author:</p>
+                    <p>Add a new author:&nbsp;
+                        {
+                            errors.map((err, index) => <small key={index} style={{color:"red"}}>{err}</small>)
+                        }
+                    </p>
                 </div>
             </div>    
             <div className="row">
                 <div className="col-6">
-                    {
-                        errors.map((err, index) => <p key={index}>{err}</p>)
-                    }
                     <form onSubmit={ onSubmit }>
-
-
                         <div className="form-group">
                             <label>Name:</label>
                             <input onChange={(e)=>setName(e.target.value)} type="text" className="form-control"/>
